@@ -85,13 +85,35 @@ public class PagesController {
 
 
     @RequestMapping("/math/volume/{length}/{width}/{height}")
-    public String getRectangleVolume(@PathVariable Map dimensions) {
+    public String getRectangleVolume(@PathVariable Map dimensions) {    //can specify Map data types like Map<String, Integer>
         int length = Integer.parseInt(dimensions.get("length").toString());
         int width = Integer.parseInt(dimensions.get("width").toString());
         int height = Integer.parseInt(dimensions.get("height").toString());
         int volume = length * width * height;
-//        return "The volume of a " String.valueOf(volume);
         return String.format("The volume of a %sx%sx%s rectangle is %s",length, width, height, volume);
     }
+    //curl -i -X PATCH "localhost:8080/math/volume/3/4/5"
+
+    @PostMapping("/math/area")
+    public String getCircleArea(@RequestParam Map<String, String > body) {
+//        return body.toString();
+        if(body.get("type").equals("circle")){
+            if (body.get("radius") != null) {
+                double radius = Double.parseDouble(body.get("radius"));
+                double area = returnPi() * Math.pow(radius, 2);
+                return String.format("Area of a circle with a radius of %s is %s", radius, area);
+            }else return "Invalid";
+
+        } else if(body.get("type").equals("rectangle")) {
+            if(body.get("width") != null && body.get("height") != null) {
+                int width = Integer.parseInt(body.get("width"));
+                int height = Integer.parseInt(body.get("height"));
+                int area = Math.multiplyExact(width, height);
+                return String.format("Area of a %sx%s rectangle is %s", width, height, area);
+            }else return "Invalid";
+        } else return "uh oh";
+    }
+    //curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d 'type=circle&radius=4' "http://localhost:8080/math/area"
+
 
 }

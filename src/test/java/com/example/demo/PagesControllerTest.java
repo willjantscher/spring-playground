@@ -4,8 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 //for using get() import below
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -93,5 +95,36 @@ public class PagesControllerTest {
         this.mvc.perform(get("/math/calculate?operation=divide&x=30&y=5"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("30 / 5 = 6"));
+    }
+
+    @Test
+    public void testCircleArea() throws Exception {
+        MockHttpServletRequestBuilder request = post("/math/area")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("type", "circle")
+                .param("radius", "4");
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string("Area of a circle with a radius of 4.0 is 50.26548245743669"));
+    }
+    @Test
+    public void testRectangleArea() throws Exception {
+        MockHttpServletRequestBuilder request = post("/math/area")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("type", "rectangle")
+                .param("width", "4")
+                .param("height", "7");
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string("Area of a 4x7 rectangle is 28"));
+    }    @Test
+    public void testInvalicContentArea() throws Exception {
+        MockHttpServletRequestBuilder request = post("/math/area")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("type", "rectangle")
+                .param("radius", "4");
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string("Invalid"));
     }
 }
