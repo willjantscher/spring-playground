@@ -114,6 +114,12 @@ public class PagesController {
         } else return "uh oh";
     }
     //curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d 'type=circle&radius=4' "http://localhost:8080/math/area"
-
-
+    @GetMapping("/cookie")
+    public String getCookie(@CookieValue(name = "foo") String cookie) {
+        return cookie;
+    }
+    @GetMapping("/header")
+    public String getHeader(@RequestHeader String host) {
+        return host;
+    }
 }

@@ -13,6 +13,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;    //second option?
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.web.bind.annotation.CookieValue;
+import javax.servlet.http.Cookie;
+
 
 @WebMvcTest(PagesController.class)  //note the name is the class, not the test class
 public class PagesControllerTest {
@@ -117,7 +120,8 @@ public class PagesControllerTest {
         this.mvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(content().string("Area of a 4x7 rectangle is 28"));
-    }    @Test
+    }
+    @Test
     public void testInvalicContentArea() throws Exception {
         MockHttpServletRequestBuilder request = post("/math/area")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -126,5 +130,17 @@ public class PagesControllerTest {
         this.mvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(content().string("Invalid"));
+    }
+    @Test
+    public void testCookies() throws Exception {
+        this.mvc.perform(get("/cookie").cookie(new Cookie("foo", "bar")))
+                .andExpect(status().isOk())
+                .andExpect(content().string("bar"));
+    }
+    @Test
+    public void testHeaders() throws Exception {
+        this.mvc.perform(get("/header").header("Host", "example.com"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("example.com"));
     }
 }
