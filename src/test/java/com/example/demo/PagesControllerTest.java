@@ -8,8 +8,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 //for using get() import below
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;    //second option?
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,6 +47,25 @@ public class PagesControllerTest {
         this.mvc.perform(get("/math/calculate?x=30&y=5"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("30 + 5 = 35"));
+    }
+
+    @Test
+    public void testGetVolume() throws Exception {
+        this.mvc.perform(get("/math/volume/3/4/5"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("The volume of a 3x4x5 rectangle is 60"));
+    }
+    @Test
+    public void testPostVolume() throws Exception {
+        this.mvc.perform(post("/math/volume/3/4/5"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("The volume of a 3x4x5 rectangle is 60"));
+    }
+    @Test
+    public void testPatchVolume() throws Exception {
+        this.mvc.perform(patch("/math/volume/3/4/5"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("The volume of a 3x4x5 rectangle is 60"));
     }
 
 

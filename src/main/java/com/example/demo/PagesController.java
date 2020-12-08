@@ -3,10 +3,7 @@ package com.example.demo;
 
 
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -70,6 +67,10 @@ public class PagesController {
 //           return x + y + "fool" + operation;
 //        }
 //        return String.format("%s %s %s = %s", x, operator, y, result);
+
+
+
+
     }
     @PostMapping("/math/sum")
     public String getMultipleParams(@RequestParam Integer[] n) {
@@ -82,9 +83,15 @@ public class PagesController {
         return output.toString();
     }
 
-//    @GetMapping("/math/calculate")
-//    public String calculate() {
-//
-//    }
+
+    @RequestMapping("/math/volume/{length}/{width}/{height}")
+    public String getRectangleVolume(@PathVariable Map dimensions) {
+        int length = Integer.parseInt(dimensions.get("length").toString());
+        int width = Integer.parseInt(dimensions.get("width").toString());
+        int height = Integer.parseInt(dimensions.get("height").toString());
+        int volume = length * width * height;
+//        return "The volume of a " String.valueOf(volume);
+        return String.format("The volume of a %sx%sx%s rectangle is %s",length, width, height, volume);
+    }
 
 }
