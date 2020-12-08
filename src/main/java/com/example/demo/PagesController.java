@@ -28,7 +28,7 @@ public class PagesController {
     }
         //curl -X POST http://localhost:8080/tasks
     @GetMapping("/math/pi")
-    public float returnPi() {
-        return  3.141592653589793f;
+    public double returnPi() {
+        return  3.141592653589793;
     }
 }

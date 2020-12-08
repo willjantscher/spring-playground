@@ -25,4 +25,11 @@ public class PagesControllerTest {
                 .andExpect(content().string("Hello World"));   //make sure to do correct imports
 //        this.mvc.perform(get("/"))
     }
+    @Test
+    public void testMathPi() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders.get("/math/pi");
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string("3.141592653589793"));
+    }
 }
