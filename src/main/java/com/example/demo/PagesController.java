@@ -128,10 +128,6 @@ public class PagesController {
         return host;
     }
 
-
-
-
-
     @GetMapping("/flights/flight")
     public Flight getFlight() {
         Flight flight = new Flight();
@@ -154,7 +150,7 @@ public class PagesController {
     }
 
     @GetMapping("/flights")
-    public List getFlights() {
+    public Flights getFlights() {
 
         Flight flight1 = new Flight();
         try {
@@ -178,7 +174,20 @@ public class PagesController {
         }
         flight2.setTickets(Arrays.asList(ticket));
 
-        return Arrays.asList(flight1, flight2);
+        Flights flights = new Flights();
+        flights.setFlights(Arrays.asList(flight1, flight2));
+        return flights;
     }
+
+    @PostMapping("/flights/tickets/total")
+    public String getNested(@RequestBody Flight flight) {
+        //I am hardcoding this because I am lazy
+        int price1 = flight.getTickets().get(0).getPrice();
+        int price2 = flight.getTickets().get(1).getPrice();
+        int result = Math.addExact(price1, price2);
+        return  String.format("{\n  \"result\": %s\n}", result);
+    }
+
+
 }
 
