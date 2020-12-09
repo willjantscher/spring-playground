@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,6 +20,8 @@ import javax.servlet.http.Cookie;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -187,9 +190,46 @@ public class PagesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\n  \"result\": 350\n}"));
     }
+    ObjectMapper objectMapper = new ObjectMapper();
     @Test
     public void testCalculateTicketTotalSerializing() throws Exception {
+        HashMap<String, Object> passenger1 = new HashMap<String, Object>(){
+            {
+                put("firstName", "Some name");
+                put("lastName", "Some other name");
+            }
+        };
+        HashMap<String, Object> passenger2 = new HashMap<String, Object>(){
+            {
+                put("firstName", "Name B");
+                put("lastName", "Name C");
+            }
+        };
+        HashMap<String, Object> ticket1 = new HashMap<String, Object>() {
+            {
+                put("passenger", passenger1);
+                put("price:", 200);
+            }
+        };
+        HashMap<String, Object> ticket2 = new HashMap<String, Object>() {
+            {
+                put("passenger", passenger2);
+                put("price:", 150);
+            }
+        };
+        HashMap<String, Object> tickets = new HashMap<String, Object>() {
+            {
+                put("tickets", Arrays.asList(ticket1, ticket2));
+            }
+        };
 
+        String json = objectMapper.writeValueAsString(tickets);
+        MockHttpServletRequestBuilder request = post("/flights/tickets/total")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string("{\n  \"result\": 350\n}"));
     }
     @Test
     public void testCalculateTicketTotalFileFixtures() throws Exception {
