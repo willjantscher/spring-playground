@@ -1,10 +1,15 @@
 package com.example.demo;
 //to run the server ./mvnw spring-boot:run
+//localhost:8080 server will boot
 
 
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @RestController //
@@ -121,6 +126,59 @@ public class PagesController {
     @GetMapping("/header")
     public String getHeader(@RequestHeader String host) {
         return host;
+    }
+
+
+
+
+
+    @GetMapping("/flights/flight")
+    public Flight getFlight() {
+        Flight flight = new Flight();
+        try {
+            flight.setDeparts("2017-04-21 14:34");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Flight.Passenger passenger = new Flight.Passenger();
+        passenger.setFirstName("Some name");
+        passenger.setLastName("Some other name");
+
+        Flight.Ticket ticket = new Flight.Ticket();
+        ticket.setPassenger(passenger);
+        ticket.setPrice(200);
+
+        flight.setTickets(Arrays.asList(ticket));
+
+        return flight;
+    }
+
+    @GetMapping("/flights")
+    public List getFlights() {
+
+        Flight flight1 = new Flight();
+        try {
+            flight1.setDeparts("2017-04-21 14:34");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Flight.Passenger passenger = new Flight.Passenger();
+        passenger.setFirstName("Some name");
+        passenger.setLastName("Some other name");
+        Flight.Ticket ticket = new Flight.Ticket();
+        ticket.setPassenger(passenger);
+        ticket.setPrice(200);
+        flight1.setTickets(Arrays.asList(ticket));
+
+        Flight flight2 = new Flight();
+        try {
+            flight2.setDeparts("2017-04-21 14:34");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        flight2.setTickets(Arrays.asList(ticket));
+
+        return Arrays.asList(flight1, flight2);
     }
 }
 

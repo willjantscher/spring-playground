@@ -16,6 +16,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.springframework.web.bind.annotation.CookieValue;
 import javax.servlet.http.Cookie;
 
+//these are the exact ones needed for the JSON testing
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(PagesController.class)  //note the name is the class, not the test class
 public class PagesControllerTest {
@@ -122,7 +125,7 @@ public class PagesControllerTest {
                 .andExpect(content().string("Area of a 4x7 rectangle is 28"));
     }
     @Test
-    public void testInvalicContentArea() throws Exception {
+    public void testInvalidContentArea() throws Exception {
         MockHttpServletRequestBuilder request = post("/math/area")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("type", "rectangle")
@@ -143,4 +146,17 @@ public class PagesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("example.com"));
     }
+    @Test
+    public void testSingleFlightJSON() throws Exception {
+        this.mvc.perform(
+                get("/flights/flight")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.departs", is("2017-04-21 14:34")))
+                .andExpect(jsonPath("$.tickets[0].price", is(200)))
+                .andExpect(jsonPath("$.tickets[0].passenger.firstName", is("Some name")))
+                .andExpect(jsonPath("$.tickets[0].passenger.lastName", is("Some other name")));
+    }
+
 }
