@@ -26,6 +26,7 @@ public class Flight {
     private int id;
     @JsonIgnore
     private String destination;
+//    private int price;
 
     SimpleDateFormat desiredDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -79,12 +80,12 @@ public class Flight {
             this.passenger = passenger;
         }
 
-        public int getPrice() {
+        public Integer getPrice() {
             return price;
         }
 
-        public void setPrice(int price) {
-            this.price = price;
+        public void setPrice(Integer price) {
+            this.price = price.intValue();
         }
     }
 

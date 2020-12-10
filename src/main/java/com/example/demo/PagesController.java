@@ -188,6 +188,16 @@ public class PagesController {
         return  String.format("{\n  \"result\": %s\n}", result);
     }
 
+    @PostMapping("/flights/tickets/total/serializing")
+    public Flight getSerialized(@RequestBody Flight flight) {
+        //I am hardcoding this because I am lazy
+        int price1 = flight.getTickets().get(0).getPrice();
+        int price2 = flight.getTickets().get(1).getPrice();
+        int result = Math.addExact(price1, price2);
+        return  flight;
+    }
+
+
 
 }
 

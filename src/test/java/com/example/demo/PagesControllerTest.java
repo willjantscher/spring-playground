@@ -208,13 +208,13 @@ public class PagesControllerTest {
         HashMap<String, Object> ticket1 = new HashMap<String, Object>() {
             {
                 put("passenger", passenger1);
-                put("price:", 200);
+                put("price", 200);
             }
         };
         HashMap<String, Object> ticket2 = new HashMap<String, Object>() {
             {
                 put("passenger", passenger2);
-                put("price:", 150);
+                put("price", 150);
             }
         };
         HashMap<String, Object> tickets = new HashMap<String, Object>() {
@@ -224,12 +224,12 @@ public class PagesControllerTest {
         };
 
         String json = objectMapper.writeValueAsString(tickets);
-        MockHttpServletRequestBuilder request = post("/flights/tickets/total")
+        MockHttpServletRequestBuilder request = post("/flights/tickets/total/serializing")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
         this.mvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\n  \"result\": 350\n}"));
+                .andExpect(content().string(json));
     }
     @Test
     public void testCalculateTicketTotalFileFixtures() throws Exception {
