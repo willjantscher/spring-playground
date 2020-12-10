@@ -18,8 +18,7 @@ import java.util.Date;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -56,7 +55,7 @@ public class LessonsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON);
         this.mvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(content().string("[{\"id\":1,\"title\":\"something\",\"deliveredOn\":\"2020-12-10\"},{\"id\":2,\"title\":\"something\",\"deliveredOn\":\"2020-12-10\"}]"));
+                .andExpect(content().string("[{\"id\":2,\"title\":\"something\",\"deliveredOn\":\"2020-12-10\"},{\"id\":3,\"title\":\"something\",\"deliveredOn\":\"2020-12-10\"}]"));
     }
     @Test
     @Transactional
@@ -74,9 +73,33 @@ public class LessonsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON);
         this.mvc.perform(request2)
                 .andExpect(status().isOk())
-                .andExpect(content().string("[{\"id\":3,\"title\":\"testingNow\",\"deliveredOn\":null}]"));
+                .andExpect(content().string("[{\"id\":4,\"title\":\"testingNow\",\"deliveredOn\":null}]"));
     }
+    @Test
+    @Transactional
+    @Rollback
+    public void testPatchLesson() throws Exception {
+        Lesson lesson1 = new Lesson();
+        lesson1.setTitle("zzz");
+        Date date = new Date();
+        lesson1.setDeliveredOn(date);
+        repository.save(lesson1);
 
+
+//        MockHttpServletRequestBuilder request2 = get("/lessons")
+//                .contentType(MediaType.APPLICATION_JSON);
+//        this.mvc.perform(request2)
+//                .andExpect(status().isOk())
+//                .andExpect(content().string("show me the id"));
+
+
+        MockHttpServletRequestBuilder request = patch("/lessons/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"title\": \"testingNow\"}");
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string("{\"id\":1,\"title\":\"testingNow\",\"deliveredOn\":null}"));
+    }
 
 }
 
