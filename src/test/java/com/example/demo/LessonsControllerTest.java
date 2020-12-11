@@ -55,7 +55,7 @@ public class LessonsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON);
         this.mvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(content().string("[{\"id\":2,\"title\":\"something\",\"deliveredOn\":\"2020-12-10\"},{\"id\":3,\"title\":\"something\",\"deliveredOn\":\"2020-12-10\"}]"));
+                .andExpect(jsonPath("$[0].id", instanceOf(Number.class) ));
     }
     @Test
     @Transactional
@@ -73,7 +73,7 @@ public class LessonsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON);
         this.mvc.perform(request2)
                 .andExpect(status().isOk())
-                .andExpect(content().string("[{\"id\":4,\"title\":\"testingNow\",\"deliveredOn\":null}]"));
+                .andExpect(jsonPath("$[0].id", instanceOf(Number.class) ));
     }
     @Test
     @Transactional
@@ -100,6 +100,41 @@ public class LessonsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"id\":1,\"title\":\"testingNow\",\"deliveredOn\":null}"));
     }
+    @Test
+    @Transactional
+    @Rollback
+    public void testFindByTitle() throws Exception {
+        Lesson lesson1 = new Lesson();
+        lesson1.setTitle("NewBook");
+        Date date = new Date();
+        lesson1.setDeliveredOn(date);
+        repository.save(lesson1);
+
+        this.mvc.perform(get("/lessons/find/NewBook"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title" , equalTo(lesson1.getTitle())));
+    }
+    @Test
+    @Transactional
+    @Rollback
+    public void testFindBetweenID() throws Exception {
+        Lesson lesson1 = new Lesson();
+        lesson1.setTitle("something");
+        Date date = new Date();
+        lesson1.setDeliveredOn(date);
+        repository.save(lesson1);
+
+        Lesson lesson2 = new Lesson();
+        lesson2.setTitle("somethingElse");
+        Date date2 = new Date();
+        lesson2.setDeliveredOn(date);
+        repository.save(lesson2);
+
+        this.mvc.perform(get("/lessons/find/between?id1=1&id2=10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].title", equalTo(lesson1.getTitle())));
+    }
+
 
 }
 

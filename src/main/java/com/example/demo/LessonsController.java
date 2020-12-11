@@ -1,7 +1,9 @@
 package com.example.demo;
-
+//./mvnw springBoot:run
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -44,5 +46,16 @@ public class LessonsController {
         lesson.setId(oldLesson.getId());
         return this.repository.save(lesson);
     }
+
+    @GetMapping("/find/{title}")
+    public Lesson findByTitle(@PathVariable String title) {
+        return this.repository.findByTitle(title);
+    }
+    //I used id here because dates are coded as string currently :/
+    @GetMapping("/find/between")
+    public List<Lesson> findBetween(@RequestParam Long id1, @RequestParam Long id2) {
+        return this.repository.findByIdBetween(id1, id2);
+    }
+
 
 }
