@@ -42,8 +42,8 @@ public class LessonsController {
 
     @PatchMapping("/{id}")
     public Lesson patch(@PathVariable Long id, @RequestBody Lesson lesson) {
-        Lesson oldLesson = this.repository.findById(id).get();
-        lesson.setId(oldLesson.getId());
+//        Lesson oldLesson = this.repository.findById(id).get();
+        lesson.setId(id);
         return this.repository.save(lesson);
     }
 
