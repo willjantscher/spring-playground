@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties("word-counter")
+@ConfigurationProperties("wordcounter")
 public class MyConfig {
     private boolean caseSensitive;
     private String[] skip;

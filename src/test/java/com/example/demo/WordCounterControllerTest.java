@@ -50,7 +50,7 @@ public class WordCounterControllerTest {
 //        wordCounter = null;
 //    }
 
-        @BeforeEach
+    @BeforeEach
     public void setup() {
         Map<String, Integer> mockedOutput = new HashMap<>();
         mockedOutput.put("a", 2);
