@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import junit.runner.Version;
 
-@SpringBootTest
-//@WebMvcTest(WordCounterController.class)
+//@SpringBootTest
+@WebMvcTest(WordCounterController.class)
 public class WordCounterControllerTest {
 
 //    private final WordCounter wordCounter;
@@ -36,47 +37,50 @@ public class WordCounterControllerTest {
 //        this.wordCounter = wordCounter;
 //    }
 
-    @Autowired
-    WordCounter wordCounter;
-
-//    @MockBean
-//    WordCounter wordCounterMocked;
 //    @Autowired
-//    private MockMvc mvc;
+//    WordCounter wordCounter;
 
-//    @BeforeEach
-//    public void setup() {
-//        Map<String, Integer> mockedOutput = new HashMap<>();
-//        mockedOutput.put("a", 2);
-//        mockedOutput.put("test", 3);
-//        mockedOutput.put("of", 1);
-//        mockedOutput.put("this", 2);
-//        mockedOutput.put("is", 2);
-//        mockedOutput.put("stuff", 1);
-//        when(wordCounterMocked.count("this is a test a test test of stuff this is")).thenReturn(mockedOutput);
+    @MockBean
+    WordCounter wordCounterMocked;
+
+    @Autowired
+    private MockMvc mvc;
+
+//    public WordCounterControllerTest() {
+//        wordCounter = null;
 //    }
-//
-//    @Test
-//    public void testWordCounterMockBean() {
-//        Map<String, Integer> output = wordCounterMocked.count("this is a test a test test of stuff this is");
-//        assertEquals("{a=2, test=3, of=1, this=2, is=2, stuff=1}", output.toString());
-//    }
-    @Test
-    public void testWordCounterAutowired() throws Exception {
-        Map<String, Integer> output = this.wordCounter.count("this is a test a test test of stuff this is is ");
-        assertEquals("{a=2, test=3, of=1, this=2, is=3, stuff=1}", output.toString());
+
+        @BeforeEach
+    public void setup() {
+        Map<String, Integer> mockedOutput = new HashMap<>();
+        mockedOutput.put("a", 2);
+        mockedOutput.put("test", 3);
+        mockedOutput.put("of", 1);
+        mockedOutput.put("this", 2);
+        mockedOutput.put("is", 2);
+        mockedOutput.put("stuff", 1);
+        when(wordCounterMocked.count("this is a test a test test of stuff this is")).thenReturn(mockedOutput);
     }
 //
+    @Test
+    public void testWordCounterMockBean() {
+        Map<String, Integer> output = wordCounterMocked.count("this is a test a test test of stuff this is");
+        assertEquals("{a=2, test=3, of=1, this=2, is=2, stuff=1}", output.toString());
+    }
 //    @Test
-//    public void testWordCounterControllerMockBean() throws Exception {
-//        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/words/count")
-//                .contentType(MediaType.TEXT_PLAIN)
-//                .content("this is a test a test test of stuff this is");
-//        this.mvc.perform(request)
-//                .andExpect(status().isOk())
-//                .andExpect(content().string("{\"a\":2,\"test\":3,\"of\":1,\"this\":2,\"is\":2,\"stuff\":1}"));
+//    public void testWordCounterAutowired() throws Exception {
+//        Map<String, Integer> output = this.wordCounter.count("this is a test a test test of stuff this is is ");
+//        assertEquals("{a=2, test=3, of=1, this=2, is=3, stuff=1}", output.toString());
 //    }
-//
+    @Test
+    public void testWordCounterControllerMockBean() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/words/count")
+                .contentType(MediaType.TEXT_PLAIN)
+                .content("this is a test a test test of stuff this is");
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string("{\"a\":2,\"test\":3,\"of\":1,\"this\":2,\"is\":2,\"stuff\":1}"));
+    }
 //    @Test
 //    public void testWordCounterControllerAutowired() throws Exception {
 //        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/words/count")
@@ -86,5 +90,4 @@ public class WordCounterControllerTest {
 //                .andExpect(status().isOk())
 //                .andExpect(content().string("some data"));
 //    }
-
 }
