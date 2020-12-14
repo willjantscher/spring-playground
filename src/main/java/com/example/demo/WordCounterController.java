@@ -25,5 +25,8 @@ public class WordCounterController {
     }
 //curl -i -X POST -H 'Content-Type: text/plain' -d 'How now, brown cow' localhost:8080/words/count
 
-
+    @PostMapping("/words/count/testing")
+    public String test (@RequestBody String input) {
+        return wordCounter.test(input);
+    }
 }

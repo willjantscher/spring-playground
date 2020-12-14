@@ -1,19 +1,21 @@
 package com.example.demo;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class WordCounter {
+    private final MyConfig config;
+
+    public WordCounter(MyConfig config) {
+        this.config = config;
+    }
 
     public Map<String, Integer> count(String input) {
-        String words[] = input.replaceAll("[^a-zA-Z ]", "").toLowerCase().split(" ");
+        String words[];
+        words = input.replaceAll("[^a-zA-Z ]", "").toLowerCase().split(" ");
+
         Map<String, Integer> output = new HashMap<>();
         for (String word : words) {
             if (!output.containsKey(word)) {
@@ -25,5 +27,47 @@ public class WordCounter {
         return output;
     }
 
+
+
+    public String test (String input) {
+        return config.getSkip().toString();
+    }
+
 }
 //Use @Component method (@Service, @RestController, etc...)
+
+
+
+
+
+//    public Map<String, Integer> count(String input) {
+//        String words[];
+//        if(config.isCaseSensitive()) {
+//            words = input.replaceAll("[^a-zA-Z ]", "").split(" ");
+//        }else {
+//            words = input.replaceAll("[^a-zA-Z ]", "").toLowerCase().split(" ");
+//        }
+//
+//        for (int i = 0; i < words.length; i++) {
+//            for(String word : config.getSkip()) {
+//                if (words[i].equals(word)) {
+//                    words[i] = "";
+//                }
+//            }
+//        }
+//
+//        Map<String, Integer> output = new HashMap<>();
+//        for (String word : words) {
+//            if(word != "") {
+//                if (!output.containsKey(word)) {
+//                    output.put(word, 1);
+//                }else  {
+//                    output.put(word, output.get(word) + 1);
+//                }
+//            }
+//
+//        }
+////        Map<String, Integer> outputTest = new HashMap<>();
+////        outputTest.put("testing", 3);
+//        return output;
+//    }
